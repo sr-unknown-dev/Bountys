@@ -8,6 +8,7 @@ use unknown\Loader;
 
 class BountyManager
 {
+    public array $bountySe = [];
     public array $bounty = [];
     private Config $config;
 
@@ -53,5 +54,32 @@ class BountyManager
     {
         $this->config->set("bounty", $this->bounty);
         $this->config->save();
+    }
+
+    public function addtBountySe(Player $player, string $target): void
+    {
+        $this->bountySe[$player->getName()] = $target;
+        $player->sendMessage("§aYou have selected a bounty on " . $target);
+    }
+
+    public function removeBountySe(Player $player): void
+    {
+        unset($this->bountySe[$player->getName()]);
+        $player->sendMessage("§cYou have removed the bounty selection.");
+    }
+
+    public function isBountySe(Player $player): bool
+    {
+        return isset($this->bountySe[$player->getName()]);
+    }
+
+    public function getCordsTarget(Player $player): array
+    {
+        $targets = $this->bountySe[$player->getName()] ?? null;
+        if ($targets instanceof Player) {
+            $x = (int)$targets->getPosition()->getX();
+            $z = (int)$targets->getPosition()->getZ();
+            return $this->isBountySe($player) ? $this->bountySe[$player->getName()] : [];
+        }
     }
 }

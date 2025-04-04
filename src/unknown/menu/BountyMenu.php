@@ -37,9 +37,14 @@ class BountyMenu
             if ($item->getCustomName() !== null && $item->getCustomName() !== "") {
                 $bountyName = $item->getNamedTag()->getString("bounty", "");
                 if ($bountyName !== "") {
-                    $bountyManager->removeBounty($player);
-                    $player->sendMessage(TextFormat::GREEN . "You have claimed the bounty on " . $bountyName);
-                    return $transaction->discard();
+                    if (!$bountyManager->isBountySe($player)){
+                        $bountyManager->addtBountySe($player, $bountyName);
+                        return $transaction->discard();
+                    } else {
+                        $bountyManager->removeBounty($player);
+                        $bountyManager->addtBountySe($player, $bountyName);
+                        return $transaction->discard();
+                    }
                 }
             }
             return $transaction->discard();
