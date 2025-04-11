@@ -14,9 +14,14 @@ class BountyMenu
 {
     public function open(Player $player): void
     {
+        $xzz = [];
         $menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
         $bountyManager = Loader::getInstance()->getBountyManager();
         $bountys = $bountyManager->getBountys();
+        $zzz = $xzz[$player->getName()] = [
+            "vendedor" => "Hola, bienvenido",
+            "comprador" => "Hola, mucho gusto"
+        ];
         foreach ($bountys as $targetName => $bounty) {
             $playerName = $bounty["player"] ?? "Unknown";
             $targetAmount = $bounty["amount"] ?? 0;
@@ -43,6 +48,7 @@ class BountyMenu
                     } else {
                         $bountyManager->removeBounty($player);
                         $bountyManager->addtBountySe($player, $bountyName);
+                        Loader::getInstance()->getBountyManager()->getBounty($player);
                         return $transaction->discard();
                     }
                 }
